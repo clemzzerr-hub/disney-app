@@ -126,6 +126,7 @@ async function act(a) {
 // ---------- Alertes ----------
 async function checkAlerts() {
   if (!app.plan || !app.entities.length) return;
+  if (!cfg.demo && !app.fam.watch) return; // alertes en pause hors du parc
   const n = now();
   const hits = C.evaluate({ plan: app.plan, state: app.fam, entities: app.entities, live: app.live, now: n });
   for (const h of hits) {
@@ -217,6 +218,11 @@ function renderNow() {
   const hits = C.evaluate({ plan: app.plan, state: app.fam, entities: app.entities, live: app.live, now: n }).filter((h) => h.kind !== 'step');
   const recent = Object.entries(app.fam.alerts).sort((a, b) => b[1].t - a[1].t).slice(0, 3);
   let html = hero('now');
+  html += app.fam.watch
+    ? `<div class="card watch on"><div class="spread"><div><b>🛰️ Alertes actives aujourd'hui</b><div class="small muted">Le veilleur surveille le guide pour toute la famille.</div></div>
+        <button class="btn small" data-watch="0">Pause</button></div></div>`
+    : `<div class="card watch"><div class="spread"><div><b>🛰️ Alertes en pause</b><div class="small muted">${app.nearPark ? 'Vous êtes au parc ! Activez les alertes.' : 'À activer en arrivant au parc.'}</div></div>
+        <button class="btn gold" data-watch="1">On est au parc : activer</button></div></div>`;
   if (app.plan.exemple) html += `<div class="card thanks small"><b>Programme d'exemple.</b> Envoie ton guide de la journée parfaite à Claude : il remplacera ce programme et ses alertes.</div>`;
   if (hits.length) {
     html += `<div class="card alert-card"><div class="label">C'est le moment</div>${hits.map((h) => `
@@ -351,6 +357,8 @@ function renderFamily() {
       <div class="row"><code style="flex:1">${esc(invite)}</code><button class="btn small" id="copy-invite">Copier</button></div></div>
 
     <div class="card"><div class="label">Notifications</div>
+      <div class="switch"><div><b>Alertes du guide</b><div class="small muted">${app.fam.watch ? 'Actives pour aujourd\'hui.' : 'En pause. Se remettent en pause chaque nuit.'}</div></div>
+        <button class="btn small ${app.fam.watch ? 'gold' : ''}" data-watch="${app.fam.watch ? 0 : 1}">${app.fam.watch ? 'Actives' : 'Activer'}</button></div>
       <div class="switch"><div><b>Sur ce téléphone</b><div class="small muted">Quand l'appli est ouverte.</div></div>
         <button class="btn small ${cfg.notif ? 'gold' : ''}" id="tg-notif">${cfg.notif ? 'Activées' : 'Activer'}</button></div>
       <div class="switch"><div><b>Même téléphone en veille</b><div class="small muted">1. Installe l'appli gratuite <b>ntfy</b> (App Store / Play Store).<br>2. Abonne-toi au canal : <code>${esc(T.alerts)}</code></div></div>
@@ -359,7 +367,7 @@ function renderFamily() {
         <button class="btn small" id="test-alert">Envoyer</button></div></div>
 
     <div class="card"><div class="label">Partage de position</div>
-      <div class="switch"><div><b>Partager ma position</b><div class="small muted">Visible par la famille sur la carte, mise à jour chaque minute.</div></div>
+      <div class="switch"><div><b>Partager ma position</b><div class="small muted">Visible par la famille sur la carte, mise à jour toutes les 3 min quand on bouge.</div></div>
         <button class="btn small ${cfg.share ? 'gold' : ''}" id="tg-share">${cfg.share ? 'Activé' : 'Activer'}</button></div></div>
 
     <div class="card"><div class="label">Alertes du guide</div><div class="list">${planRules.map((r) => `
@@ -440,8 +448,13 @@ function startGeo(prompted) {
   if (geoWatch != null) return;
   geoWatch = navigator.geolocation.watchPosition((p) => {
     app.myPos = { lat: p.coords.latitude, lng: p.coords.longitude };
-    if (cfg.share && cfg.me && Date.now() - lastSent > 60000) {
-      lastSent = Date.now();
+    const near = C.inPark(app.myPos);
+    if (near && !app.nearPark && !app.fam.watch) { toast('🏰 Vous êtes au parc ! Activez les alertes dans l\'onglet Maintenant.', 8000); navigator.vibrate?.(200); }
+    if (near !== !!app.nearPark) { app.nearPark = near; if (app.view === 'now') render(); }
+    // Quota ntfy (250 messages/jour) : au plus toutes les 3 min, et seulement après un déplacement.
+    const moved = !app.lastSentPos || C.walkMin(app.lastSentPos, app.myPos) >= 1;
+    if (cfg.share && cfg.me && moved && Date.now() - lastSent > 180000) {
+      lastSent = Date.now(); app.lastSentPos = { ...app.myPos };
       C.ntfyPublish(T.pos, { message: JSON.stringify({ m: cfg.me, lat: +app.myPos.lat.toFixed(5), lng: +app.myPos.lng.toFixed(5) }) }).catch(() => {});
     }
     if (app.view === 'map') drawMap();
@@ -468,6 +481,7 @@ document.addEventListener('click', (ev) => {
   if (d.focus) { const e = app.entities.find((x) => x.id === d.focus); if (e?.location) focusMap(e.location.latitude, e.location.longitude); return; }
   if (d.bell) return bellDialog(d.bell);
   if (d.unrule) return act({ k: 'unrule', id: d.unrule });
+  if (d.watch !== undefined) { act({ k: 'watch', on: d.watch === '1' }); return toast(d.watch === '1' ? 'Alertes activées pour aujourd\'hui ✨' : 'Alertes en pause.'); }
   if (d.me) { cfg.me = d.me; saveCfg(); return render(); }
   if (d.wtype) { app.wFilter.type = d.wtype; return renderWaits(); }
   if (d.wpark) { app.wFilter.park = d.wpark; return renderWaits(); }

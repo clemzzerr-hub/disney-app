@@ -169,6 +169,8 @@ main { max-width: 640px; margin: 0 auto; }
 #wq { background: #fff; border: 0; box-shadow: 0 3px 0 rgba(0,0,0,.08); }
 
 /* ============ Alertes ============ */
+.watch { border: 3px solid #ffd23f; }
+.watch.on { border-color: #1fae6a; background: rgba(230, 255, 240, .95); }
 .alert-card { background: linear-gradient(135deg, #fff7c2, #ffe27a); border: 3px solid #ffcf3f; }
 .alert-card .label { color: #b9620a; }
 .alert-item { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-top: 2px dashed rgba(185, 98, 10, .25); }

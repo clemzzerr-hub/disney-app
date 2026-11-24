@@ -7,4 +7,6 @@ crons = ["* * * * *"]
 
 [vars]
 SITE_URL = "https://clemzzerr-hub.github.io/disney-app/"
-# FAMILY_CODE est un secret : `npx wrangler secret put FAMILY_CODE`
+# Secrets à ajouter dans le tableau de bord Cloudflare (Settings > Variables and Secrets) :
+#   FAMILY_CODE = code famille (onglet Famille de l'appli)
+#   NTFY_TOKEN  = jeton d'un compte ntfy.sh gratuit (tk_...)

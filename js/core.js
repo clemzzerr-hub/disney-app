@@ -60,6 +60,9 @@ export function findEntity(entities, query) {
     || null;
 }
 
+// Zone des deux parcs + Disney Village (approximative).
+export const inPark = (p) => !!p && p.lat > 48.8640 && p.lat < 48.8790 && p.lng > 2.7690 && p.lng < 2.7920;
+
 export function placeOf(step, entities) {
   if (step.lat && step.lng) return { name: step.place || step.title, lat: step.lat, lng: step.lng };
   const key = norm(step.place);
@@ -82,7 +85,7 @@ export function walkMin(a, b) {
 // ---------- État partagé de la famille ----------
 // L'état est reconstruit en rejouant les messages du canal « -etat » (ntfy garde 12 à 24 h).
 export function emptyState() {
-  return { steps: {}, delay: 0, order: null, rules: {}, alerts: {}, photos: {}, day: null };
+  return { steps: {}, delay: 0, order: null, rules: {}, alerts: {}, photos: {}, watch: false, day: null };
 }
 
 export function applyAction(state, a, today) {
@@ -95,8 +98,9 @@ export function applyAction(state, a, today) {
     case 'rule': if (a.rule?.id) state.rules[a.rule.id] = a.rule; break;
     case 'unrule': delete state.rules[a.id]; break;
     case 'alert': state.alerts[a.key] = { t: a.t, title: a.title, message: a.message }; break;
+    case 'watch': state.watch = !!a.on; break; // alertes actives pour la journée (au parc)
     case 'photo': if (isPhoto(a.data) && typeof a.m === 'string') state.photos[a.m] = a.data; break;
-    case 'reset': { const { alerts, photos } = state; Object.assign(state, emptyState(), { alerts, photos }); break; }
+    case 'reset': { const { alerts, photos, watch } = state; Object.assign(state, emptyState(), { alerts, photos, watch }); break; }
     default: break;
   }
   return state;
@@ -242,19 +246,22 @@ export function evaluate({ plan, state, entities, live, now }) {
 }
 
 // ---------- ntfy (notifications + canal partagé, sans compte) ----------
-export async function ntfyPublish(topic, { message, title, tags, priority, click }) {
+// `token` (facultatif) : jeton d'un compte ntfy gratuit, pour que le quota de 250 messages/jour
+// soit compté pour ce compte et non pour l'adresse IP (partagée chez Cloudflare).
+const auth = (token) => (token ? { Authorization: `Bearer ${token}` } : {});
+export async function ntfyPublish(topic, { message, title, tags, priority, click }, token) {
   const body = { topic, message: message || ' ' };
   if (title) body.title = title;
   if (tags) body.tags = tags;
   if (priority) body.priority = priority;
   if (click) body.click = click;
-  const r = await fetch(NTFY, { method: 'POST', body: JSON.stringify(body) });
+  const r = await fetch(NTFY, { method: 'POST', body: JSON.stringify(body), headers: auth(token) });
   if (!r.ok) throw new Error(`ntfy ${r.status}`);
   return r.json();
 }
 
-export async function ntfyPoll(topic, since = '24h') {
-  const r = await fetch(`${NTFY}/${encodeURIComponent(topic)}/json?poll=1&since=${since}`);
+export async function ntfyPoll(topic, since = '24h', token) {
+  const r = await fetch(`${NTFY}/${encodeURIComponent(topic)}/json?poll=1&since=${since}`, { headers: auth(token) });
   if (!r.ok) throw new Error(`ntfy ${r.status}`);
   const text = await r.text();
   return text.split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((m) => m.event === 'message');
