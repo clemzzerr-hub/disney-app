@@ -19,53 +19,44 @@
   color-scheme: light;
 }
 
-/* ---- Cars : Maintenant + Carte ---- */
-body[data-theme="now"], body[data-theme="map"] {
+/* ---- Cars : Maintenant (désert de la Route 66, éclairs, damiers) ---- */
+body[data-theme="now"] {
   --accent: #e8322b; --accent2: #ffd23f; --hdr: #d7262b;
-  --bg: radial-gradient(120% 60% at 50% 0%, #fff1a8 0%, transparent 60%), linear-gradient(180deg, #ffd65a 0%, #ffa94d 50%, #ff7a45 100%);
+  --pattern: url(../img/bg-cars-desert.svg) center bottom calc(var(--nav-h) - 24px) / max(100%, 760px) auto no-repeat, url(../img/bg-cars-tile.svg) 0 0 / 200px 200px repeat;
+  --bg: linear-gradient(180deg, #ffe9a8 0%, #ffc56b 45%, #ff9f50 100%);
 }
-/* ---- Toy Story : Journée ---- */
+/* ---- Cars : Carte (fond neutre, la carte prend tout l'écran) ---- */
+body[data-theme="map"] { --accent: #e8322b; --accent2: #ffd23f; --hdr: #d7262b; --pattern: none; --bg: #e9f3dd; }
+/* ---- Toy Story : Journée (papier peint ciel à nuages) ---- */
 body[data-theme="day"] {
   --accent: #1e6fd9; --accent2: #ffd400; --hdr: #1e6fd9;
-  --bg:
-    radial-gradient(circle at 12% 8%, #fff 0 34px, transparent 35px),
-    radial-gradient(circle at 18% 6%, #fff 0 26px, transparent 27px),
-    radial-gradient(circle at 82% 22%, #fff 0 30px, transparent 31px),
-    radial-gradient(circle at 88% 20%, #fff 0 22px, transparent 23px),
-    radial-gradient(circle at 30% 55%, rgba(255,255,255,.9) 0 26px, transparent 27px),
-    radial-gradient(circle at 36% 53%, rgba(255,255,255,.9) 0 20px, transparent 21px),
-    radial-gradient(circle at 75% 78%, rgba(255,255,255,.9) 0 30px, transparent 31px),
-    radial-gradient(circle at 81% 76%, rgba(255,255,255,.9) 0 22px, transparent 23px),
-    linear-gradient(180deg, #5bbcff 0%, #8fd3ff 100%);
+  --pattern: url(../img/bg-toy.svg) 0 0 / 320px 240px repeat;
+  --bg: linear-gradient(180deg, #49aefc 0%, #7cc8ff 100%);
 }
-/* ---- Monstres & Cie : Attentes ---- */
+/* ---- Monstres & Cie : Attentes (fourrure bleue à taches violettes) ---- */
 body[data-theme="waits"] {
   --accent: #23b26d; --accent2: #b8f26a; --hdr: #6a3fd1;
-  --bg:
-    radial-gradient(circle at 15% 20%, #9b7bf0 0 18px, transparent 19px),
-    radial-gradient(circle at 80% 12%, #9b7bf0 0 26px, transparent 27px),
-    radial-gradient(circle at 70% 60%, #9b7bf0 0 14px, transparent 15px),
-    radial-gradient(circle at 25% 80%, #9b7bf0 0 22px, transparent 23px),
-    radial-gradient(circle at 90% 90%, #9b7bf0 0 16px, transparent 17px),
-    linear-gradient(160deg, #4fa3ff 0%, #7a55e0 100%);
+  --pattern: url(../img/bg-monsters.svg) 0 0 / 240px 240px repeat;
+  --bg: linear-gradient(180deg, #3bbbe0 0%, #2a9fd0 100%);
 }
-/* ---- Lilo & Stitch : Famille ---- */
+/* ---- Lilo & Stitch : Famille (chemise hawaïenne) ---- */
 body[data-theme="family"] {
   --accent: #ff4f98; --accent2: #7ff0ff; --hdr: #2f6fe4;
-  --bg: linear-gradient(180deg, #ffb3d1 0%, #ffd9a0 35%, #4fd6ee 70%, #1fa8d8 100%);
+  --pattern: url(../img/bg-aloha.svg) 0 0 / 260px 260px repeat;
+  --bg: linear-gradient(180deg, #2ccbe6 0%, #1aa3d4 100%);
 }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
 body {
-  background: var(--bg) fixed;
-  background-color: #ffb347;
+  background: #ffc56b;
   color: var(--text);
   font: 15px/1.45 Nunito, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
-  transition: background .4s;
 }
+/* Fond fixe (fonctionne aussi sur iPhone, contrairement à background-attachment: fixed) */
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; background: var(--pattern, none), var(--bg); }
 h1, h2, h3, .serif { font-family: Fredoka, Nunito, system-ui, sans-serif; font-weight: 600; letter-spacing: -.01em; }
 button { font: inherit; color: inherit; cursor: pointer; }
 a { color: var(--accent); }
@@ -88,7 +79,8 @@ a { color: var(--accent); }
 .live-dot.err { background: #ffb0ad; }
 
 main { max-width: 640px; margin: 0 auto; }
-.view { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.view { padding: 18px 16px 120px; display: flex; flex-direction: column; gap: 22px; }
+.view-map { padding-bottom: 0; }
 
 /* ============ Bannière de film ============ */
 .hero {
@@ -111,7 +103,7 @@ main { max-width: 640px; margin: 0 auto; }
 .hero.stitch::after { content: "🌊"; position: absolute; right: 10px; bottom: 4px; font-size: 34px; transform: rotate(-12deg); }
 
 /* ============ Cartes ============ */
-.card { background: var(--card); border-radius: var(--radius); padding: 16px; box-shadow: 0 6px 0 rgba(0, 0, 0, .08), 0 10px 26px rgba(40, 20, 90, .12); }
+.card { background: rgba(255, 255, 255, .9); border-radius: var(--radius); padding: 16px; box-shadow: 0 6px 0 rgba(0, 0, 0, .08), 0 10px 26px rgba(40, 20, 90, .12); }
 .card h2 { margin: 4px 0 6px; font-size: 26px; line-height: 1.15; }
 .card h3 { margin: 0 0 8px; font-size: 18px; }
 .label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 800; }
@@ -269,5 +261,4 @@ code { background: var(--card2); border-radius: 8px; padding: 2px 6px; font-size
 
 @media (prefers-reduced-motion: reduce) {
   .splash-avatars .av i { animation: none; }
-  body { transition: none; }
 }

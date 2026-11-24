@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+  <defs>
+    <path id="c" d="M0 40 C0 28 12 22 22 26 C24 12 40 4 54 10 C62 0 84 0 92 14 C104 8 120 16 118 30 C130 30 136 40 132 48 L4 48 C-2 48 -2 42 0 40z"/>
+  </defs>
+  <g fill="#fff">
+    <use href="#c" x="14" y="18"/>
+    <use href="#c" x="180" y="70" transform="translate(180 70) scale(.75) translate(-180 -70)"/>
+    <use href="#c" x="40" y="142" transform="translate(40 142) scale(.9) translate(-40 -142)"/>
+    <use href="#c" x="214" y="176" transform="translate(214 176) scale(.6) translate(-214 -176)"/>
+  </g>
+  <g fill="#ffd400" opacity=".7">
+    <path d="M286 18l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/>
+    <path d="M150 128l2 5 5 .7-4 3.5 1 5-4-2.5-4 2.5 1-5-4-3.5 5-.7z"/>
+  </g>
+</svg>
