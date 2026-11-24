@@ -135,6 +135,26 @@ async function notifyLocal(h) {
   }
 }
 
+// ---------- Thèmes des films (stickers dessinés, clins d'œil) ----------
+const STICKERS = {
+  cars: `<svg class="sticker" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="#ffd23f" stroke="#fff" stroke-width="6"/><path d="M58 8 22 56h24l-8 36 40-52H54z" fill="#e8322b" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><text x="50" y="62" font-family="Fredoka,sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#fff" stroke="#23204a" stroke-width="1">95</text></svg>`,
+  toy: `<svg class="sticker" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="#fff"/><path d="M50 8l11 24 26-3-17 20 17 20-26-3-11 24-11-24-26 3 17-20-17-20 26 3z" fill="#ffd400" stroke="#c99400" stroke-width="3" stroke-linejoin="round"/><circle cx="50" cy="51" r="13" fill="#ffe680" stroke="#c99400" stroke-width="3"/><circle cx="87" cy="29" r="4" fill="#ffd400"/><circle cx="13" cy="29" r="4" fill="#ffd400"/></svg>`,
+  monsters: `<svg class="sticker" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="54" r="40" fill="#8fe04a" stroke="#fff" stroke-width="6"/><path d="M28 22 22 6l14 10M72 22l6-16-14 10" fill="#f3f0e0" stroke="#fff" stroke-width="3"/><circle cx="50" cy="46" r="18" fill="#fff"/><circle cx="52" cy="47" r="9" fill="#23b26d"/><circle cx="54" cy="45" r="4" fill="#23204a"/><path d="M32 72q18 12 36 0" fill="none" stroke="#23204a" stroke-width="4" stroke-linecap="round"/><path d="M42 75v5h6v-4M54 76v4h5v-5" fill="#fff"/></svg>`,
+  stitch: `<svg class="sticker" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="#fff"/><g fill="#ff4f98" stroke="#fff" stroke-width="3">${[0, 72, 144, 216, 288].map((a) => `<ellipse cx="50" cy="28" rx="16" ry="22" transform="rotate(${a} 50 50)"/>`).join('')}</g><circle cx="50" cy="50" r="9" fill="#ffd23f"/><path d="M50 50l18 -26" stroke="#ffd23f" stroke-width="3" stroke-linecap="round"/><circle cx="68" cy="24" r="4" fill="#ffd23f"/></svg>`,
+};
+const HEROES = {
+  now: ['cars', 'Ka-chow ! On fonce.', 'Vitesse… mais dans l\'ordre du programme.'],
+  day: ['toy', 'Vers l\'infini et au-delà !', 'Tout le programme de la journée, partagé avec la famille.'],
+  waits: ['monsters', 'Le cri-mètre des files d\'attente', 'Plus c\'est vert, moins on attend. Touchez 🔔 pour être prévenu.'],
+  family: ['stitch', 'Ohana signifie famille.', 'Et dans la famille, personne n\'est abandonné, ni oublié.'],
+};
+const THEME_COLOR = { now: '#d7262b', map: '#d7262b', day: '#1e6fd9', waits: '#6a3fd1', family: '#2f6fe4' };
+function hero(view) {
+  const [k, title, sub] = HEROES[view];
+  const cls = { cars: 'cars', toy: 'toy', monsters: 'monsters', stitch: 'stitch' }[k];
+  return `<div class="hero ${cls}">${STICKERS[k]}<b>${esc(title)}</b><span>${esc(sub)}</span></div>`;
+}
+
 // ---------- Rendu ----------
 function render() {
   if (!app.plan) return;
@@ -183,7 +203,7 @@ function renderNow() {
   const n = now(); const sch = schedule(); const i = currentIndex(sch, n.min);
   const hits = C.evaluate({ plan: app.plan, state: app.fam, entities: app.entities, live: app.live, now: n }).filter((h) => h.kind !== 'step');
   const recent = Object.entries(app.fam.alerts).sort((a, b) => b[1].t - a[1].t).slice(0, 3);
-  let html = '';
+  let html = hero('now');
   if (app.plan.exemple) html += `<div class="card thanks small"><b>Programme d'exemple.</b> Envoie ton guide de la journée parfaite à Claude : il remplacera ce programme et ses alertes.</div>`;
   if (hits.length) {
     html += `<div class="card alert-card"><div class="label">C'est le moment</div>${hits.map((h) => `
@@ -238,7 +258,7 @@ function renderDay() {
     </div>`;
   }).join('');
   const done = sch.filter((s) => s.status !== 'todo').length;
-  $('#view-day').innerHTML = `
+  $('#view-day').innerHTML = hero('day') + `
     <div class="card"><div class="spread"><div><div class="label">Le programme</div><h3 style="margin:4px 0 0">${done} / ${sch.length} étapes</h3></div>
       <div class="row">${app.fam.delay ? `<span class="tag">+${app.fam.delay} min</span>` : ''}</div></div>
       <p class="small muted" style="margin:8px 0 0">Coche une étape faite ou passée : la suite se recalcule sur le téléphone de toute la famille. ↑ ↓ pour échanger deux étapes.</p></div>
@@ -269,18 +289,19 @@ function renderWaits() {
     } else sub += ` · ${next.slice(0, 4).map(C.fmt).join(', ')}`;
     const badge = f.type === 'ATTRACTION' ? `<span class="wait ${waitClass(w)}">${w != null ? w + ' min' : esc(STATUS[l?.status] || '—')}</span>` : `<span class="wait">${C.fmt(next[0])}</span>`;
     return `<div class="item"><div class="grow"><div class="name">${esc(e.name)}</div><div class="sub">${esc(sub)}</div>
+      ${f.type === 'ATTRACTION' && w != null ? `<div class="meter"><i style="width:${Math.max(6, Math.min(100, w / 90 * 100))}%"></i></div>` : ''}
       ${rule ? `<div class="sub" style="color:var(--gold)">🔔 ${rule.kind === 'wait' ? `alerte sous ${esc(rule.max)} min` : `alerte ${esc(rule.before)} min avant`}</div>` : ''}</div>
       ${badge}<button class="icon-btn ${rule ? 'on' : ''}" data-bell="${esc(e.id)}" aria-label="Alerte">🔔</button></div>`;
   }).join('') || `<p class="muted">Aucun résultat${app.liveErr ? ' (données indisponibles)' : ''}.</p>`;
 
-  $('#view-waits').innerHTML = `
+  $('#view-waits').innerHTML = hero('waits') + `
     <div class="chips">${[['ATTRACTION', 'Attractions'], ['SHOW', 'Spectacles']].map(([k, v]) => `<button class="chip ${f.type === k ? 'on' : ''}" data-wtype="${k}">${v}</button>`).join('')}
       <button class="chip ${f.park === 'all' ? 'on' : ''}" data-wpark="all">Les 2 parcs</button>
       ${Object.entries(C.PARKS).map(([id, nm]) => `<button class="chip ${f.park === id ? 'on' : ''}" data-wpark="${id}">${esc(nm)}</button>`).join('')}</div>
     <div class="row"><input id="wq" placeholder="Rechercher…" value="${esc(f.q)}" style="flex:1">
       ${f.type === 'ATTRACTION' ? `<button class="btn small" id="wsort">${f.sort === 'wait' ? 'Tri : attente' : 'Tri : A → Z'}</button>` : ''}</div>
     <div class="card"><div class="list">${rowsHtml}</div></div>
-    <p class="small muted">${cfg.demo ? 'Mode démo : attentes simulées. ' : ''}Mis à jour ${app.liveAt ? app.liveAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '—'} · Source : themeparks.wiki. Touchez 🔔 pour être prévenu.</p>`;
+    <p class="small footnote">${cfg.demo ? 'Mode démo : attentes simulées. ' : ''}Mis à jour ${app.liveAt ? app.liveAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '—'} · Source : themeparks.wiki. Touchez 🔔 pour être prévenu.</p>`;
   const q = $('#wq'); q.oninput = () => { f.q = q.value; renderWaits(); const nq = $('#wq'); nq.focus(); nq.setSelectionRange(nq.value.length, nq.value.length); };
 }
 
@@ -290,7 +311,7 @@ function renderFamily() {
   const invite = location.origin + location.pathname + '#f=' + cfg.topic;
   const planRules = C.allRules(app.plan, { rules: {} });
   const myRules = Object.values(app.fam.rules);
-  $('#view-family').innerHTML = `
+  $('#view-family').innerHTML = hero('family') + `
     <div class="card"><div class="label">La famille</div><div class="list">${fam.map((m) => `
       <div class="item">${avatar(m)}<div class="grow"><div class="sub">${esc(pos(m.id))}</div></div>
       <button class="btn small ${cfg.me === m.id ? 'gold' : ''}" data-me="${esc(m.id)}">${cfg.me === m.id ? "C'est moi" : 'Je suis…'}</button></div>`).join('')}</div></div>
@@ -322,7 +343,7 @@ function renderFamily() {
       <p class="small muted">Pour tester l'appli à la maison : attentes simulées et heure choisie. Les alertes restent sur ce téléphone.</p>
       <div class="row"><button class="btn small ${cfg.demo ? 'gold' : ''}" id="tg-demo">${cfg.demo ? 'Démo activée' : 'Activer la démo'}</button>
         <input type="time" id="demo-time" value="${esc(cfg.demoTime || '')}" style="width:auto" ${cfg.demo ? '' : 'disabled'}></div></div>
-    <p class="small muted">Données d'attente : themeparks.wiki · Carte : © OpenStreetMap. Application personnelle, sans lien avec Disney.</p>`;
+    <p class="small footnote">Données d'attente : themeparks.wiki · Carte : © OpenStreetMap. Application personnelle, sans lien avec Disney.</p>`;
 }
 
 const nameOf = (idOrName) => app.entities.find((e) => e.id === idOrName)?.name || idOrName;
@@ -480,6 +501,8 @@ function bellDialog(entityId) {
 
 function show(view) {
   app.view = view;
+  document.body.dataset.theme = view;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLOR[view]);
   document.querySelectorAll('.view').forEach((v) => { v.hidden = v.id !== 'view-' + view; });
   document.querySelectorAll('.tabs button').forEach((b) => b.classList.toggle('active', b.dataset.view === view));
   try { sessionStorage.setItem('dlp-view', view); } catch { /* rien */ }
