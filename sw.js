@@ -1,5 +1,5 @@
 // Cache de l'application pour qu'elle s'ouvre même avec un réseau faible dans le parc.
-const CACHE = 'journee-magique-v3';
+const CACHE = 'journee-magique-v4';
 const SHELL = ['./', 'index.html', 'css/style.css', 'js/app.js', 'js/core.js', 'plan.json', 'manifest.webmanifest', 'icons/icon.svg', 'icons/icon-192.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => {

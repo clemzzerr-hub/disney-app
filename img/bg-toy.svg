@@ -1,15 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+<svg xmlns="http://www.w3.org/2000/svg" width="228" height="228" viewBox="0 0 228 228">
   <defs>
-    <path id="c" d="M0 40 C0 28 12 22 22 26 C24 12 40 4 54 10 C62 0 84 0 92 14 C104 8 120 16 118 30 C130 30 136 40 132 48 L4 48 C-2 48 -2 42 0 40z"/>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".7" stop-color="#f4f8fc"/><stop offset="1" stop-color="#dfe9f3"/>
+    </linearGradient>
+    <g id="cl">
+      <path d="M10 58C3 58 1 51 7 47C5 37 15 31 25 35C27 21 41 15 53 21C57 5 79 0 91 12C105 10 113 24 107 36C115 40 115 52 107 57Z" fill="url(#g)"/>
+      <path d="M25 35C30 40 31 46 30 50M53 21C58 26 60 33 58 40M91 12C97 18 98 28 94 34" fill="none" stroke="#d3dfeb" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M62 14C68 10 78 9 84 13" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+      <rect x="-4" y="57" width="124" height="3" rx="1.5" fill="#e6eef6"/>
+    </g>
   </defs>
-  <g fill="#fff">
-    <use href="#c" x="14" y="18"/>
-    <use href="#c" x="180" y="70" transform="translate(180 70) scale(.75) translate(-180 -70)"/>
-    <use href="#c" x="40" y="142" transform="translate(40 142) scale(.9) translate(-40 -142)"/>
-    <use href="#c" x="214" y="176" transform="translate(214 176) scale(.6) translate(-214 -176)"/>
-  </g>
-  <g fill="#ffd400" opacity=".7">
-    <path d="M286 18l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/>
-    <path d="M150 128l2 5 5 .7-4 3.5 1 5-4-2.5-4 2.5 1-5-4-3.5 5-.7z"/>
-  </g>
+  <use href="#cl" transform="translate(22 14) scale(.48)"/>
+  <use href="#cl" transform="translate(114 44) scale(.82)"/>
+  <use href="#cl" transform="translate(132 138) scale(.48)"/>
+  <use href="#cl" transform="translate(4 156) scale(.82)"/>
+  <use href="#cl" transform="translate(-110 44) scale(.82)" />
 </svg>

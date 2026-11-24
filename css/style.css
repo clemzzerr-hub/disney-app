@@ -27,11 +27,11 @@ body[data-theme="now"] {
 }
 /* ---- Cars : Carte (fond neutre, la carte prend tout l'écran) ---- */
 body[data-theme="map"] { --accent: #e8322b; --accent2: #ffd23f; --hdr: #d7262b; --pattern: none; --bg: #e9f3dd; }
-/* ---- Toy Story : Journée (papier peint ciel à nuages) ---- */
+/* ---- Toy Story : Journée (papier peint à nuages de la chambre, plinthe et parquet) ---- */
 body[data-theme="day"] {
   --accent: #1e6fd9; --accent2: #ffd400; --hdr: #1e6fd9;
-  --pattern: url(../img/bg-toy.svg) 0 0 / 320px 240px repeat;
-  --bg: linear-gradient(180deg, #49aefc 0%, #7cc8ff 100%);
+  --pattern: url(../img/bg-toy-floor.svg) center bottom calc(var(--nav-h) - 30px) / max(100%, 760px) auto no-repeat, url(../img/bg-toy.svg) 0 0 / 228px 228px repeat;
+  --bg: #6cc5ee;
 }
 /* ---- Monstres & Cie : Attentes (fourrure bleue à taches violettes) ---- */
 body[data-theme="waits"] {
@@ -39,11 +39,11 @@ body[data-theme="waits"] {
   --pattern: url(../img/bg-monsters.svg) 0 0 / 240px 240px repeat;
   --bg: linear-gradient(180deg, #3bbbe0 0%, #2a9fd0 100%);
 }
-/* ---- Lilo & Stitch : Famille (chemise hawaïenne) ---- */
+/* ---- Lilo & Stitch : Famille (feuilles blanches de la robe rouge de Lilo) ---- */
 body[data-theme="family"] {
   --accent: #ff4f98; --accent2: #7ff0ff; --hdr: #2f6fe4;
-  --pattern: url(../img/bg-aloha.svg) 0 0 / 260px 260px repeat;
-  --bg: linear-gradient(180deg, #2ccbe6 0%, #1aa3d4 100%);
+  --pattern: url(../img/bg-lilo.svg) 0 0 / 240px 240px repeat;
+  --bg: #d7192e;
 }
 
 * { box-sizing: border-box; }
@@ -96,8 +96,8 @@ main { max-width: 640px; margin: 0 auto; }
   background: conic-gradient(#fff 25%, #23204a 0 50%, #fff 0 75%, #23204a 0) 0 0 / 17px 17px; opacity: .9;
 }
 .hero.cars { padding-right: 46px; background: linear-gradient(135deg, #e8322b, #c4161c); }
-.hero.toy { background: linear-gradient(135deg, #1e6fd9, #1553a8); padding-right: 52px; }
-.hero.toy::after { content: "★"; position: absolute; right: 14px; top: 6px; font-size: 40px; color: var(--accent2); transform: rotate(14deg); }
+.hero.toy { background: linear-gradient(135deg, #1e6fd9, #1553a8); padding-left: 104px; }
+.hero.toy svg.sticker { width: 88px; height: 88px; left: 8px; }
 .hero.monsters { background: linear-gradient(135deg, #23b26d, #138a52); }
 .hero.stitch { background: linear-gradient(135deg, #2f6fe4, #1fa8d8); padding-right: 50px; }
 .hero.stitch::after { content: "🌊"; position: absolute; right: 10px; bottom: 4px; font-size: 34px; transform: rotate(-12deg); }

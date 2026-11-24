@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 150" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6c24a"/><stop offset="1" stop-color="#e59a1f"/></linearGradient>
+    <linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#f1f4f8"/><stop offset="1" stop-color="#d9e0e8"/></linearGradient>
+  </defs>
+  <rect y="0" width="800" height="6" fill="#4fa9dc" opacity=".35"/>
+  <rect y="6" width="800" height="48" fill="url(#b)"/>
+  <rect y="14" width="800" height="3" fill="#ffffff"/>
+  <rect y="54" width="800" height="96" fill="url(#w)"/>
+  <rect y="54" width="800" height="5" fill="#b8740f" opacity=".45"/>
+  <g stroke="#c9801a" stroke-width="1.5" opacity=".55">
+    <path d="M0 78H800M0 104H800M0 130H800"/>
+    <path d="M120 59v19M430 59v19M690 59v19M260 78v26M560 78v26M60 104v26M360 104v26M720 104v26M200 130v20M500 130v20"/>
+  </g>
+  <g stroke="#ffe08a" stroke-width="1" opacity=".5"><path d="M0 66H800M0 91H800M0 117H800"/></g>
+</svg>
