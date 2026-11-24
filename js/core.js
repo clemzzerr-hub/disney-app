@@ -82,12 +82,12 @@ export function walkMin(a, b) {
 // ---------- État partagé de la famille ----------
 // L'état est reconstruit en rejouant les messages du canal « -etat » (ntfy garde 12 à 24 h).
 export function emptyState() {
-  return { steps: {}, delay: 0, order: null, rules: {}, alerts: {}, day: null };
+  return { steps: {}, delay: 0, order: null, rules: {}, alerts: {}, photos: {}, day: null };
 }
 
 export function applyAction(state, a, today) {
   if (!a || typeof a !== 'object') return state;
-  if (a.day && today && a.day !== today) return state; // on ignore les actions d'un autre jour
+  if (a.day && today && a.day !== today && a.k !== 'photo') return state; // on ignore les actions d'un autre jour
   switch (a.k) {
     case 'step': state.steps[a.id] = a.status; if (!a.status) delete state.steps[a.id]; break;
     case 'delay': state.delay = Number(a.v) || 0; break;
@@ -95,11 +95,15 @@ export function applyAction(state, a, today) {
     case 'rule': if (a.rule?.id) state.rules[a.rule.id] = a.rule; break;
     case 'unrule': delete state.rules[a.id]; break;
     case 'alert': state.alerts[a.key] = { t: a.t, title: a.title, message: a.message }; break;
-    case 'reset': { const alerts = state.alerts; Object.assign(state, emptyState(), { alerts }); break; }
+    case 'photo': if (isPhoto(a.data) && typeof a.m === 'string') state.photos[a.m] = a.data; break;
+    case 'reset': { const { alerts, photos } = state; Object.assign(state, emptyState(), { alerts, photos }); break; }
     default: break;
   }
   return state;
 }
+
+// Photo de profil : petite vignette JPEG en data URL, vérifiée avant tout affichage.
+export const isPhoto = (v) => typeof v === 'string' && v.length < 4000 && /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(v);
 
 export function stateFromMessages(messages, today) {
   const s = emptyState();

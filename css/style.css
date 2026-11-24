@@ -141,6 +141,7 @@ main { max-width: 640px; margin: 0 auto; }
   font-size: 20px; border: 3px solid var(--c, var(--accent)); background: #fff;
 }
 .av.dim i { opacity: .35; }
+.av i.ph, .fpin.ph { background-size: cover; background-position: center; }
 
 /* ============ Attentes (cri-mètre) ============ */
 .wait {
@@ -205,7 +206,7 @@ main { max-width: 640px; margin: 0 auto; }
   background: #6c63c7; color: #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, .35); transform: translate(-50%, -50%); position: absolute;
 }
 .wpin.g { background: #1fae6a; } .wpin.o { background: #f08a1c; } .wpin.r { background: #e2403b; }
-.fpin { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--c); background: #fff; display: grid; place-items: center; font-size: 18px; box-shadow: 0 2px 6px rgba(0, 0, 0, .4); }
+.fpin { width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--c); background: #fff; display: grid; place-items: center; font-size: 18px; box-shadow: 0 2px 6px rgba(0, 0, 0, .4); }
 .leaflet-popup-content { margin: 12px 14px; font: 14px/1.4 Nunito, sans-serif; color: var(--text); }
 .leaflet-popup-content-wrapper { border-radius: 16px; }
 

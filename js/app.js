@@ -30,7 +30,17 @@ const now = () => {
   return n;
 };
 const member = (id) => app.plan.family.find((m) => m.id === id);
-const avatar = (m, dim) => m ? `<span class="av${dim ? ' dim' : ''}"><i style="--c:${esc(m.color)}">${esc(m.emoji || m.name[0])}</i>${esc(m.name)}</span>` : '';
+// Photos : celles reçues de la famille, gardées aussi sur ce téléphone (ntfy n'efface qu'au bout de 12 h).
+const PHOTO_KEY = 'dlp-photos-v1';
+const localPhotos = (() => { try { return JSON.parse(localStorage.getItem(PHOTO_KEY)) || {}; } catch { return {}; } })();
+const photoOf = (id) => { const p = app.fam.photos?.[id] || localPhotos[id]; return C.isPhoto(p) ? p : null; };
+function keepPhotos() {
+  let changed = false;
+  for (const [id, p] of Object.entries(app.fam.photos || {})) if (C.isPhoto(p) && localPhotos[id] !== p) { localPhotos[id] = p; changed = true; }
+  if (changed) { try { localStorage.setItem(PHOTO_KEY, JSON.stringify(localPhotos)); } catch { /* plein */ } }
+}
+const face = (m) => { const p = photoOf(m.id); return p ? `<i class="ph" style="--c:${esc(m.color)};background-image:url('${p}')"></i>` : `<i style="--c:${esc(m.color)}">${esc(m.emoji || m.name[0])}</i>`; };
+const avatar = (m, dim) => m ? `<span class="av${dim ? ' dim' : ''}">${face(m)}${esc(m.name)}</span>` : '';
 const waitClass = (w) => (w == null ? 'x' : w <= 15 ? 'g' : w <= 40 ? 'o' : 'r');
 const STATUS = { OPERATING: 'Ouvert', CLOSED: 'Fermé', DOWN: 'Interrompu', REFURBISHMENT: 'En rénovation' };
 
@@ -83,12 +93,15 @@ async function loadFamily() {
     const msgs = await C.ntfyPoll(T.state);
     app.fam = C.stateFromMessages(msgs, today);
     app.lastStateId = msgs.at(-1)?.id || null;
+    keepPhotos();
+    // Les messages ntfy expirent : on repartage les photos connues ici si la famille ne les a plus.
+    for (const [id, p] of Object.entries(localPhotos)) if (member(id) && C.isPhoto(p) && !app.fam.photos[id]) act({ k: 'photo', m: id, data: p });
     const pos = await C.ntfyPoll(T.pos, '2h');
     for (const m of pos) { try { const p = JSON.parse(m.message); app.positions[p.m] = { ...p, t: m.time }; } catch { /* ignoré */ } }
   } catch { toast('Synchronisation famille indisponible (hors ligne ?)'); }
   subscribe(T.state, (m) => {
     try { C.applyAction(app.fam, JSON.parse(m.message), C.parisNow().date); } catch { return; }
-    checkAlerts(); render();
+    keepPhotos(); checkAlerts(); render(); if (app.view === 'map') drawMap();
   });
   subscribe(T.pos, (m) => {
     try { const p = JSON.parse(m.message); app.positions[p.m] = { ...p, t: m.time }; } catch { return; }
@@ -329,7 +342,9 @@ function renderFamily() {
   $('#view-family').innerHTML = hero('family') + `
     <div class="card"><div class="label">La famille</div><div class="list">${fam.map((m) => `
       <div class="item">${avatar(m)}<div class="grow"><div class="sub">${esc(pos(m.id))}</div></div>
-      <button class="btn small ${cfg.me === m.id ? 'gold' : ''}" data-me="${esc(m.id)}">${cfg.me === m.id ? "C'est moi" : 'Je suis…'}</button></div>`).join('')}</div></div>
+      <div class="row" style="justify-content:flex-end"><label class="btn small">📷 ${photoOf(m.id) ? 'Changer' : 'Photo'}<input type="file" accept="image/*" data-photo="${esc(m.id)}" hidden></label>
+      <button class="btn small ${cfg.me === m.id ? 'gold' : ''}" data-me="${esc(m.id)}">${cfg.me === m.id ? "C'est moi" : 'Je suis…'}</button></div></div>`).join('')}</div>
+      <p class="small muted" style="margin:6px 0 0">La photo de chacun apparaît sur la carte quand il partage sa position.</p></div>
 
     <div class="card"><div class="label">Inviter la famille</div>
       <p class="small">Envoie ce lien aux autres : tout le monde partage le même programme, les mêmes alertes et les positions.</p>
@@ -403,7 +418,7 @@ function drawMap() {
   if (pts.length > 1) L.polyline(pts, { color: '#3d5bff', weight: 5, opacity: .8, dashArray: '2 9', lineCap: 'round' }).addTo(L_.route);
   for (const [id, p] of Object.entries(app.positions)) {
     const m = member(id); if (!m || (Date.now() / 1000 - p.t) > 3600) continue;
-    L.marker([p.lat, p.lng], { icon: L.divIcon({ className: '', html: `<div class="fpin" style="--c:${esc(m.color)}">${esc(m.emoji || m.name[0])}</div>`, iconSize: [34, 34], iconAnchor: [17, 17] }), zIndexOffset: 1000 })
+    L.marker([p.lat, p.lng], { icon: L.divIcon({ className: '', html: photoOf(m.id) ? `<div class="fpin ph" style="--c:${esc(m.color)};background-image:url('${photoOf(m.id)}')"></div>` : `<div class="fpin" style="--c:${esc(m.color)}">${esc(m.emoji || m.name[0])}</div>`, iconSize: [44, 44], iconAnchor: [22, 22] }), zIndexOffset: 1000 })
       .bindPopup(`<b>${esc(m.name)}</b><br>${esc(Math.round((Date.now() / 1000 - p.t) / 60))} min`).addTo(L_.fam);
   }
   if (app.myPos && !app.positions[cfg.me]) L.circleMarker([app.myPos.lat, app.myPos.lng], { radius: 8, color: '#fff', weight: 3, fillColor: '#3d7bff', fillOpacity: 1 }).addTo(L_.fam);
@@ -473,7 +488,29 @@ document.addEventListener('click', (ev) => {
     default: break;
   }
 });
-document.addEventListener('change', (ev) => {
+// Réduit la photo choisie en vignette carrée (< 4 Ko) pour qu'elle passe par le canal ntfy.
+async function makeThumb(file) {
+  const img = await createImageBitmap(file);
+  const side = Math.min(img.width, img.height);
+  for (const [size, q] of [[96, .72], [84, .62], [72, .55], [64, .45], [56, .4]]) {
+    const cv = document.createElement('canvas'); cv.width = cv.height = size;
+    cv.getContext('2d').drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, size, size);
+    const url = cv.toDataURL('image/jpeg', q);
+    if (C.isPhoto(url) && url.length < 3700) return url;
+  }
+  throw new Error('trop grande');
+}
+
+document.addEventListener('change', async (ev) => {
+  const pid = ev.target.dataset?.photo;
+  if (pid && ev.target.files?.[0]) {
+    try {
+      const data = await makeThumb(ev.target.files[0]);
+      localPhotos[pid] = data; try { localStorage.setItem(PHOTO_KEY, JSON.stringify(localPhotos)); } catch { /* plein */ }
+      await act({ k: 'photo', m: pid, data }); toast('Photo enregistrée et partagée 📷');
+    } catch { toast('Impossible de lire cette image.'); }
+    return;
+  }
   if (ev.target.id === 'demo-time') { cfg.demoTime = ev.target.value; saveCfg(); refreshLive(); }
 });
 
@@ -559,6 +596,7 @@ function splash() {
 // ---------- Démarrage ----------
 async function start() {
   app.plan = await (await fetch('plan.json', { cache: 'no-cache' })).json();
+  if (cfg.me && !app.plan.family.some((m) => m.id === cfg.me)) { delete cfg.me; cfg.share = false; saveCfg(); }
   document.title = app.plan.title;
   $('#hdr-title').textContent = app.plan.title;
   $('#hdr-sub').textContent = app.plan.subtitle;

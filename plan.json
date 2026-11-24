@@ -3,77 +3,388 @@
   "subtitle": "Disneyland Paris",
   "date": "",
   "family": [
-    { "id": "moi", "name": "Moi", "color": "#e8322b", "emoji": "🏎️" },
-    { "id": "p2", "name": "Personne 2", "color": "#1e6fd9", "emoji": "🚀" },
-    { "id": "p3", "name": "Personne 3", "color": "#ff4f98", "emoji": "🌺" }
+    {
+      "id": "maurice",
+      "name": "Maurice",
+      "color": "#e8322b",
+      "emoji": "🏎️"
+    },
+    {
+      "id": "michelle",
+      "name": "Michelle",
+      "color": "#ff4f98",
+      "emoji": "🌺"
+    }
   ],
-  "settings": { "stepReminderMin": 10 },
+  "settings": {
+    "stepReminderMin": 10
+  },
   "steps": [
-    { "id": "parking", "start": "09:45", "duration": 15, "type": "trajet", "title": "Parking au plus près", "place": "entree",
-      "note": "Au bout de l'allée du parking, la barrière est toujours ouverte : gare-toi à partir de là, il reste de la place sur la fin des rangées, les plus proches de l'entrée." },
-    { "id": "entree", "start": "10:00", "duration": 15, "type": "trajet", "title": "Entrée et bonjour à Mickey", "place": "entree",
-      "note": "Si vous êtes tôt, Mickey vous attend à l'entrée ! Pensez à commander le déjeuner en Click & Collect dans l'appli Disneyland pendant les files." },
-    { "id": "phantom", "start": "10:15", "duration": 35, "type": "attraction", "title": "Phantom Manor (maison hantée)", "place": "Phantom Manor",
-      "note": "On commence toujours par Frontierland. Un incontournable absolu, l'ambiance est folle." },
-    { "id": "indiana", "start": "10:50", "duration": 35, "type": "attraction", "title": "Indiana Jones et le Temple du Péril", "place": "Indiana Jones",
-      "note": "Adventureland. Attention, ça loope !" },
-    { "id": "pirates", "start": "11:25", "duration": 30, "type": "attraction", "title": "Pirates des Caraïbes", "place": "Pirates of the Caribbean",
-      "note": "Un grand classique immersif. Après, c'est l'heure de manger." },
-    { "id": "dejeuner", "start": "12:00", "duration": 45, "type": "repas", "title": "Déjeuner à midi pile", "place": "Casa de Coco", "fixed": true,
-      "note": "À l'ouverture des restaurants pour éviter la foule. Au choix : Casa de Coco (mexicain), Hakuna Matata (africain/kebabs) ou Cowboy Cookout (barbecue). À éviter : Casey's Corner et Café Hyperion." },
-    { "id": "buzz", "start": "12:45", "duration": 35, "type": "attraction", "title": "Buzz Lightyear Laser Blast", "place": "Buzz Lightyear Laser Blast",
-      "note": "Pendant que tout le monde mange ! Buzz, Star Tours et Space Mountain sont côte à côte." },
-    { "id": "startours", "start": "13:20", "duration": 30, "type": "attraction", "title": "Star Tours", "place": "Star Tours" },
-    { "id": "space", "start": "13:50", "duration": 40, "type": "attraction", "title": "Star Wars Hyperspace Mountain", "place": "Star Wars Hyperspace Mountain",
-      "note": "Seulement si moins de 35-40 min de queue. Sinon passe, l'appli te préviendra quand ça descend.", "alert": { "max": 35, "from": "10:00", "to": "15:00" } },
-    { "id": "gouter", "start": "14:30", "duration": 25, "type": "pause", "title": "Goûter : gaufres Mickey", "place": "Victoria’s Home-Style Restaurant",
-      "note": "Les incroyables gaufres en forme de Mickey chez Victoria's, ou les beignets au chocolat de Cookie Kitchen." },
-    { "id": "bascule", "start": "15:00", "duration": 15, "type": "trajet", "title": "Direction Adventure World", "place": "entree",
-      "note": "Vers 15h, 16h maximum : l'affluence y est plus calme. On peut faire autant d'allers-retours qu'on veut entre les 2 parcs." },
-    { "id": "spiderman", "start": "15:15", "duration": 50, "type": "attraction", "title": "Spider-Man W.E.B. Adventure", "place": "Spider-Man W.E.B. Adventure",
-      "note": "Trop, trop bien, ultra interactif ! Moins d'1h d'attente : FONCEZ.", "alert": { "max": 60, "from": "15:00" } },
-    { "id": "crush", "start": "16:05", "duration": 25, "type": "attraction", "title": "Crush's Coaster en Single Rider", "place": "Crush's Coaster",
-      "note": "File Single Rider (en solo) : moins de 40 min, FONCEZ. Sinon, retentez très tard le soir.", "alert": { "max": 40, "queue": "SINGLE_RIDER", "from": "15:00" } },
-    { "id": "ratatouille", "start": "16:30", "duration": 40, "type": "attraction", "title": "Ratatouille", "place": "Ratatouille",
-      "note": "35 min, c'est le temps normal. Astuce : la file Single Rider passe en quelques minutes.", "alert": { "max": 35, "from": "15:00" } },
-    { "id": "frozen", "start": "17:10", "duration": 60, "type": "attraction", "title": "Le Land de la Reine des Neiges", "place": "Frozen Ever After",
-      "note": "Moins d'1h d'attente sur Frozen Ever After : FONCEZ ! On n'a pas encore réussi à la faire, elle a l'air incroyable.", "alert": { "max": 60, "from": "15:00" } },
-    { "id": "carsroadtrip", "start": "18:10", "duration": 25, "type": "pause", "title": "Bonus : Cars ROAD TRIP", "place": "Cars ROAD TRIP",
-      "note": "Une balade tranquille pour reposer ses jambes, si on a le temps." },
-    { "id": "diner", "start": "18:40", "duration": 45, "type": "repas", "title": "Dîner au studio", "place": "Super Diner",
-      "note": "Le Super Diner (côté Avengers) ou les stands de nourriture du Land de la Reine des Neiges." },
-    { "id": "avengers", "start": "19:25", "duration": 30, "type": "attraction", "title": "Avengers Assemble: Flight Force", "place": "Avengers Assemble: Flight Force",
-      "note": "Plus de 15 min d'attente, c'est trop long : vise 19h-20h, les familles commencent à rentrer.", "alert": { "max": 15, "from": "15:00" } },
-    { "id": "final", "start": "21:00", "duration": 60, "type": "spectacle", "title": "Le grand show de fin de journée", "place": "chateau",
-      "note": "Disney Tales of Magic sur le Château (parc principal) ou Disney Cascade of Lights au Land de la Reine des Neiges. L'appli te prévient avant l'heure exacte du jour. À ne manquer sous aucun prétexte !" }
+    {
+      "id": "parking",
+      "start": "09:45",
+      "duration": 15,
+      "type": "trajet",
+      "title": "Parking au plus près",
+      "place": "entree",
+      "note": "Au bout de l'allée du parking, la barrière est toujours ouverte : gare-toi à partir de là, il reste de la place sur la fin des rangées, les plus proches de l'entrée."
+    },
+    {
+      "id": "entree",
+      "start": "10:00",
+      "duration": 15,
+      "type": "trajet",
+      "title": "Entrée et bonjour à Mickey",
+      "place": "entree",
+      "note": "Si vous êtes tôt, Mickey vous attend à l'entrée ! Pensez à commander le déjeuner en Click & Collect dans l'appli Disneyland pendant les files."
+    },
+    {
+      "id": "phantom",
+      "start": "10:15",
+      "duration": 35,
+      "type": "attraction",
+      "title": "Phantom Manor (maison hantée)",
+      "place": "Phantom Manor",
+      "note": "On commence toujours par Frontierland. Un incontournable absolu, l'ambiance est folle."
+    },
+    {
+      "id": "indiana",
+      "start": "10:50",
+      "duration": 35,
+      "type": "attraction",
+      "title": "Indiana Jones et le Temple du Péril",
+      "place": "Indiana Jones",
+      "note": "Adventureland. Attention, ça loope !"
+    },
+    {
+      "id": "pirates",
+      "start": "11:25",
+      "duration": 30,
+      "type": "attraction",
+      "title": "Pirates des Caraïbes",
+      "place": "Pirates of the Caribbean",
+      "note": "Un grand classique immersif. Après, c'est l'heure de manger."
+    },
+    {
+      "id": "dejeuner",
+      "start": "12:00",
+      "duration": 45,
+      "type": "repas",
+      "title": "Déjeuner à midi pile",
+      "place": "Casa de Coco",
+      "fixed": true,
+      "note": "À l'ouverture des restaurants pour éviter la foule. Au choix : Casa de Coco (mexicain), Hakuna Matata (africain/kebabs) ou Cowboy Cookout (barbecue). À éviter : Casey's Corner et Café Hyperion."
+    },
+    {
+      "id": "buzz",
+      "start": "12:45",
+      "duration": 35,
+      "type": "attraction",
+      "title": "Buzz Lightyear Laser Blast",
+      "place": "Buzz Lightyear Laser Blast",
+      "note": "Pendant que tout le monde mange ! Buzz, Star Tours et Space Mountain sont côte à côte."
+    },
+    {
+      "id": "startours",
+      "start": "13:20",
+      "duration": 30,
+      "type": "attraction",
+      "title": "Star Tours",
+      "place": "Star Tours"
+    },
+    {
+      "id": "space",
+      "start": "13:50",
+      "duration": 40,
+      "type": "attraction",
+      "title": "Star Wars Hyperspace Mountain",
+      "place": "Star Wars Hyperspace Mountain",
+      "note": "Seulement si moins de 35-40 min de queue. Sinon passe, l'appli te préviendra quand ça descend.",
+      "alert": {
+        "max": 35,
+        "from": "10:00",
+        "to": "15:00"
+      }
+    },
+    {
+      "id": "gouter",
+      "start": "14:30",
+      "duration": 25,
+      "type": "pause",
+      "title": "Goûter : gaufres Mickey",
+      "place": "Victoria’s Home-Style Restaurant",
+      "note": "Les incroyables gaufres en forme de Mickey chez Victoria's, ou les beignets au chocolat de Cookie Kitchen."
+    },
+    {
+      "id": "bascule",
+      "start": "15:00",
+      "duration": 15,
+      "type": "trajet",
+      "title": "Direction Adventure World",
+      "place": "entree",
+      "note": "Vers 15h, 16h maximum : l'affluence y est plus calme. On peut faire autant d'allers-retours qu'on veut entre les 2 parcs."
+    },
+    {
+      "id": "spiderman",
+      "start": "15:15",
+      "duration": 50,
+      "type": "attraction",
+      "title": "Spider-Man W.E.B. Adventure",
+      "place": "Spider-Man W.E.B. Adventure",
+      "note": "Trop, trop bien, ultra interactif ! Moins d'1h d'attente : FONCEZ.",
+      "alert": {
+        "max": 60,
+        "from": "15:00"
+      }
+    },
+    {
+      "id": "crush",
+      "start": "16:05",
+      "duration": 25,
+      "type": "attraction",
+      "title": "Crush's Coaster en Single Rider",
+      "place": "Crush's Coaster",
+      "note": "File Single Rider (en solo) : moins de 40 min, FONCEZ. Sinon, retentez très tard le soir.",
+      "alert": {
+        "max": 40,
+        "queue": "SINGLE_RIDER",
+        "from": "15:00"
+      }
+    },
+    {
+      "id": "ratatouille",
+      "start": "16:30",
+      "duration": 40,
+      "type": "attraction",
+      "title": "Ratatouille",
+      "place": "Ratatouille",
+      "note": "35 min, c'est le temps normal. Astuce : la file Single Rider passe en quelques minutes.",
+      "alert": {
+        "max": 35,
+        "from": "15:00"
+      }
+    },
+    {
+      "id": "frozen",
+      "start": "17:10",
+      "duration": 60,
+      "type": "attraction",
+      "title": "Le Land de la Reine des Neiges",
+      "place": "Frozen Ever After",
+      "note": "Moins d'1h d'attente sur Frozen Ever After : FONCEZ ! On n'a pas encore réussi à la faire, elle a l'air incroyable.",
+      "alert": {
+        "max": 60,
+        "from": "15:00"
+      }
+    },
+    {
+      "id": "carsroadtrip",
+      "start": "18:10",
+      "duration": 25,
+      "type": "pause",
+      "title": "Bonus : Cars ROAD TRIP",
+      "place": "Cars ROAD TRIP",
+      "note": "Une balade tranquille pour reposer ses jambes, si on a le temps."
+    },
+    {
+      "id": "diner",
+      "start": "18:40",
+      "duration": 45,
+      "type": "repas",
+      "title": "Dîner au studio",
+      "place": "Super Diner",
+      "note": "Le Super Diner (côté Avengers) ou les stands de nourriture du Land de la Reine des Neiges."
+    },
+    {
+      "id": "avengers",
+      "start": "19:25",
+      "duration": 30,
+      "type": "attraction",
+      "title": "Avengers Assemble: Flight Force",
+      "place": "Avengers Assemble: Flight Force",
+      "note": "Plus de 15 min d'attente, c'est trop long : vise 19h-20h, les familles commencent à rentrer.",
+      "alert": {
+        "max": 15,
+        "from": "15:00"
+      }
+    },
+    {
+      "id": "final",
+      "start": "21:00",
+      "duration": 60,
+      "type": "spectacle",
+      "title": "Le grand show de fin de journée",
+      "place": "chateau",
+      "note": "Disney Tales of Magic sur le Château (parc principal) ou Disney Cascade of Lights au Land de la Reine des Neiges. L'appli te prévient avant l'heure exacte du jour. À ne manquer sous aucun prétexte !"
+    }
   ],
   "rules": [
-    { "id": "clickcollect", "kind": "time", "at": "11:40", "title": "Click & Collect : commandez le déjeuner", "message": "Commandez maintenant dans l'appli Disneyland pour manger à midi pile, pendant la queue de Pirates." },
-    { "id": "bascule-limite", "kind": "time", "at": "15:45", "stepId": "bascule", "title": "Dernier moment pour Adventure World", "message": "16h maximum pour basculer dans le second parc." },
-    { "id": "familles", "kind": "time", "at": "19:00", "title": "Les familles commencent à rentrer", "message": "C'est le créneau pour Avengers Assemble et les grosses attractions du studio." },
-    { "id": "peterpan", "kind": "wait", "ride": "Peter Pan's Flight", "max": 20, "from": "10:00", "to": "21:30", "title": "Peter Pan's Flight sous 20 min", "message": "Magnifique mais victime de son succès : c'est le moment !" },
-    { "id": "tower", "kind": "wait", "ride": "The Twilight Zone Tower of Terror", "max": 15, "from": "15:00", "title": "Tower of Terror sous 15 min", "message": "Pour les amateurs d'ascenseurs qui tombent dans le vide !" },
-    { "id": "crush-soir", "kind": "wait", "ride": "Crush's Coaster", "max": 30, "from": "20:00", "title": "Crush's Coaster en fin de soirée", "message": "La file normale a baissé : c'est le moment de le tenter !" },
-    { "id": "tasses", "kind": "wait", "ride": "Mad Hatter's Tea Cups", "max": 10, "from": "12:30", "to": "15:00", "title": "Pause Tasses d'Alice", "message": "Presque pas d'attente : parfait pour une pause classique." },
-    { "id": "smallworld", "kind": "wait", "ride": "it's a small world", "max": 10, "from": "12:30", "to": "15:00", "title": "Pause \"it's a small world\"", "message": "Un classique indémodable, presque sans attente." },
-    { "id": "autopia", "kind": "wait", "ride": "Autopia", "max": 15, "from": "12:30", "to": "15:00", "title": "Bonus : Autopia sous 15 min", "message": "Conduite de petites voitures rétro, si vous avez le temps." },
-    { "id": "roilion", "kind": "show", "show": "The Lion King: Rhythms of the Pride Lands", "before": 20, "from": "12:30", "to": "15:00", "title": "Spectacle du Roi Lion bientôt", "message": "Une claque visuelle et musicale, à l'abri s'il fait chaud ou qu'il pleut." },
-    { "id": "pixar", "kind": "show", "show": "TOGETHER: a Pixar Musical Adventure", "before": 20, "from": "15:00", "to": "18:30", "title": "Spectacle Pixar bientôt", "message": "Magique, et à l'intérieur : idéal pour reposer les pieds." },
-    { "id": "talesofmagic", "kind": "show", "show": "Disney Tales of Magic", "before": 45, "title": "Show du Château : placez-vous !", "message": "Le spectacle nocturne emblématique : placez-vous dans l'axe du Château !" },
-    { "id": "cascade", "kind": "show", "show": "Disney Cascade of Lights", "before": 30, "title": "Alternative : show de la Reine des Neiges", "message": "Si vous restez au studio, le show du Land de la Reine des Neiges commence bientôt." }
+    {
+      "id": "clickcollect",
+      "kind": "time",
+      "at": "11:40",
+      "title": "Click & Collect : commandez le déjeuner",
+      "message": "Commandez maintenant dans l'appli Disneyland pour manger à midi pile, pendant la queue de Pirates."
+    },
+    {
+      "id": "bascule-limite",
+      "kind": "time",
+      "at": "15:45",
+      "stepId": "bascule",
+      "title": "Dernier moment pour Adventure World",
+      "message": "16h maximum pour basculer dans le second parc."
+    },
+    {
+      "id": "familles",
+      "kind": "time",
+      "at": "19:00",
+      "title": "Les familles commencent à rentrer",
+      "message": "C'est le créneau pour Avengers Assemble et les grosses attractions du studio."
+    },
+    {
+      "id": "peterpan",
+      "kind": "wait",
+      "ride": "Peter Pan's Flight",
+      "max": 20,
+      "from": "10:00",
+      "to": "21:30",
+      "title": "Peter Pan's Flight sous 20 min",
+      "message": "Magnifique mais victime de son succès : c'est le moment !"
+    },
+    {
+      "id": "tower",
+      "kind": "wait",
+      "ride": "The Twilight Zone Tower of Terror",
+      "max": 15,
+      "from": "15:00",
+      "title": "Tower of Terror sous 15 min",
+      "message": "Pour les amateurs d'ascenseurs qui tombent dans le vide !"
+    },
+    {
+      "id": "crush-soir",
+      "kind": "wait",
+      "ride": "Crush's Coaster",
+      "max": 30,
+      "from": "20:00",
+      "title": "Crush's Coaster en fin de soirée",
+      "message": "La file normale a baissé : c'est le moment de le tenter !"
+    },
+    {
+      "id": "tasses",
+      "kind": "wait",
+      "ride": "Mad Hatter's Tea Cups",
+      "max": 10,
+      "from": "12:30",
+      "to": "15:00",
+      "title": "Pause Tasses d'Alice",
+      "message": "Presque pas d'attente : parfait pour une pause classique."
+    },
+    {
+      "id": "smallworld",
+      "kind": "wait",
+      "ride": "it's a small world",
+      "max": 10,
+      "from": "12:30",
+      "to": "15:00",
+      "title": "Pause \"it's a small world\"",
+      "message": "Un classique indémodable, presque sans attente."
+    },
+    {
+      "id": "autopia",
+      "kind": "wait",
+      "ride": "Autopia",
+      "max": 15,
+      "from": "12:30",
+      "to": "15:00",
+      "title": "Bonus : Autopia sous 15 min",
+      "message": "Conduite de petites voitures rétro, si vous avez le temps."
+    },
+    {
+      "id": "roilion",
+      "kind": "show",
+      "show": "The Lion King: Rhythms of the Pride Lands",
+      "before": 20,
+      "from": "12:30",
+      "to": "15:00",
+      "title": "Spectacle du Roi Lion bientôt",
+      "message": "Une claque visuelle et musicale, à l'abri s'il fait chaud ou qu'il pleut."
+    },
+    {
+      "id": "pixar",
+      "kind": "show",
+      "show": "TOGETHER: a Pixar Musical Adventure",
+      "before": 20,
+      "from": "15:00",
+      "to": "18:30",
+      "title": "Spectacle Pixar bientôt",
+      "message": "Magique, et à l'intérieur : idéal pour reposer les pieds."
+    },
+    {
+      "id": "talesofmagic",
+      "kind": "show",
+      "show": "Disney Tales of Magic",
+      "before": 45,
+      "title": "Show du Château : placez-vous !",
+      "message": "Le spectacle nocturne emblématique : placez-vous dans l'axe du Château !"
+    },
+    {
+      "id": "cascade",
+      "kind": "show",
+      "show": "Disney Cascade of Lights",
+      "before": 30,
+      "title": "Alternative : show de la Reine des Neiges",
+      "message": "Si vous restez au studio, le show du Land de la Reine des Neiges commence bientôt."
+    }
   ],
   "tips": [
-    { "icon": "📱", "title": "L'appli Disneyland, votre bible", "text": "Temps d'attente, horaires des spectacles, menus et surtout le Click & Collect pour commander vos repas à l'avance." },
-    { "icon": "🚗", "title": "Se garer au plus près", "text": "Au bout de l'allée, la barrière est toujours ouverte : de la place sur la fin des rangées, les plus proches de l'entrée." },
-    { "icon": "🍽️", "title": "Manger malin", "text": "À midi pile à l'ouverture, ou après 15h quand les familles ont fini. Pendant que tout le monde mange, faites les attractions." },
-    { "icon": "🌧️", "title": "Chaud, pluie, pieds fatigués ?", "text": "Réfugiez-vous dans les théâtres : le Roi Lion (parc principal) et le spectacle Pixar (studio)." },
-    { "icon": "🔁", "title": "Allers-retours illimités", "text": "Guettez les temps d'attente : si c'est trop long, revenez plus tard (ça fait les 10 000 pas au moins 😅)." },
-    { "icon": "⚠️", "title": "Big Thunder Mountain fermé", "text": "Le train de la mine est fermé en ce moment : inutile d'y aller." },
-    { "icon": "✨", "title": "Le dernier conseil", "text": "Ne courez pas partout les yeux rivés sur la montre : baladez-vous, perdez-vous un peu. Les détails cachés font toute la magie." }
+    {
+      "icon": "📱",
+      "title": "L'appli Disneyland, votre bible",
+      "text": "Temps d'attente, horaires des spectacles, menus et surtout le Click & Collect pour commander vos repas à l'avance."
+    },
+    {
+      "icon": "🚗",
+      "title": "Se garer au plus près",
+      "text": "Au bout de l'allée, la barrière est toujours ouverte : de la place sur la fin des rangées, les plus proches de l'entrée."
+    },
+    {
+      "icon": "🍽️",
+      "title": "Manger malin",
+      "text": "À midi pile à l'ouverture, ou après 15h quand les familles ont fini. Pendant que tout le monde mange, faites les attractions."
+    },
+    {
+      "icon": "🌧️",
+      "title": "Chaud, pluie, pieds fatigués ?",
+      "text": "Réfugiez-vous dans les théâtres : le Roi Lion (parc principal) et le spectacle Pixar (studio)."
+    },
+    {
+      "icon": "🔁",
+      "title": "Allers-retours illimités",
+      "text": "Guettez les temps d'attente : si c'est trop long, revenez plus tard (ça fait les 10 000 pas au moins 😅)."
+    },
+    {
+      "icon": "⚠️",
+      "title": "Big Thunder Mountain fermé",
+      "text": "Le train de la mine est fermé en ce moment : inutile d'y aller."
+    },
+    {
+      "icon": "✨",
+      "title": "Le dernier conseil",
+      "text": "Ne courez pas partout les yeux rivés sur la montre : baladez-vous, perdez-vous un peu. Les détails cachés font toute la magie."
+    }
   ],
   "avoid": [
-    { "title": "Pinocchio, Blanche-Neige, Dumbo", "text": "Soit beaucoup trop enfantin, soit carrément terrifiant pour rien." },
-    { "title": "Casey's Corner", "text": "Les hot-dogs ne sont vraiment pas bons." },
-    { "title": "Café Hyperion", "text": "Bourratif et sans intérêt." }
+    {
+      "title": "Pinocchio, Blanche-Neige, Dumbo",
+      "text": "Soit beaucoup trop enfantin, soit carrément terrifiant pour rien."
+    },
+    {
+      "title": "Casey's Corner",
+      "text": "Les hot-dogs ne sont vraiment pas bons."
+    },
+    {
+      "title": "Café Hyperion",
+      "text": "Bourratif et sans intérêt."
+    }
   ]
 }
