@@ -1,0 +1,10 @@
+name = "journee-magique-veilleur"
+main = "worker.js"
+compatibility_date = "2025-06-01"
+
+[triggers]
+crons = ["* * * * *"]
+
+[vars]
+SITE_URL = "https://clemzzerr-hub.github.io/disney-app/"
+# FAMILY_CODE est un secret : `npx wrangler secret put FAMILY_CODE`

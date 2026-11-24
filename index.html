@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Notre journée magique</title>
+  <meta name="theme-color" content="#11163a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Journée magique">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="splash" class="splash" hidden>
+    <canvas id="fireworks"></canvas>
+    <div class="splash-avatars" id="splash-avatars"></div>
+    <svg class="castle" viewBox="0 0 240 200" aria-hidden="true">
+      <defs>
+        <linearGradient id="cw" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d9c9f2"/><stop offset="1" stop-color="#8f7cc4"/></linearGradient>
+        <linearGradient id="cr" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#6f8cff"/><stop offset="1" stop-color="#3347b8"/></linearGradient>
+      </defs>
+      <g fill="url(#cw)">
+        <rect x="40" y="110" width="160" height="90"/>
+        <rect x="20" y="95" width="30" height="105"/><rect x="190" y="95" width="30" height="105"/>
+        <rect x="70" y="70" width="28" height="130"/><rect x="142" y="70" width="28" height="130"/>
+        <rect x="104" y="45" width="32" height="155"/>
+      </g>
+      <g fill="url(#cr)">
+        <polygon points="20,95 35,55 50,95"/><polygon points="190,95 205,55 220,95"/>
+        <polygon points="70,70 84,25 98,70"/><polygon points="142,70 156,25 170,70"/>
+        <polygon points="104,45 120,0 136,45"/>
+      </g>
+      <path d="M108 200 v-30 a12 12 0 0 1 24 0 v30z" fill="#3a2e6e"/>
+      <g fill="#ffe7a3"><rect x="114" y="80" width="12" height="16" rx="6"/><rect x="78" y="100" width="10" height="13" rx="5"/><rect x="152" y="100" width="10" height="13" rx="5"/></g>
+    </svg>
+    <h1 class="splash-title" id="splash-title"></h1>
+    <p class="splash-sub" id="splash-sub"></p>
+    <button class="btn gold" id="splash-go">C'est parti</button>
+  </div>
+
+  <header class="top">
+    <div>
+      <div class="eyebrow" id="hdr-sub"></div>
+      <div class="hdr-title" id="hdr-title"></div>
+    </div>
+    <div class="hdr-right">
+      <span class="live-dot" id="live-dot" title="Données en direct"></span>
+      <span id="clock"></span>
+    </div>
+  </header>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <main>
+    <section id="view-now" class="view"></section>
+    <section id="view-day" class="view" hidden></section>
+    <section id="view-map" class="view view-map" hidden>
+      <div id="map"></div>
+      <div class="map-panel" id="map-panel"></div>
+    </section>
+    <section id="view-waits" class="view" hidden></section>
+    <section id="view-family" class="view" hidden></section>
+  </main>
+
+  <nav class="tabs" aria-label="Navigation">
+    <button data-view="now" class="active"><span>✨</span>Maintenant</button>
+    <button data-view="day"><span>🗓️</span>Journée</button>
+    <button data-view="map"><span>🗺️</span>Carte</button>
+    <button data-view="waits"><span>⏱️</span>Attentes</button>
+    <button data-view="family"><span>👨‍👩‍👧</span>Famille</button>
+  </nav>
+
+  <dialog id="dlg"></dialog>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
