@@ -189,7 +189,7 @@ function stepCard(s, n, isCurrent) {
       ${e?.entityType === 'ATTRACTION' ? `<span class="wait ${waitClass(w)}">${w != null ? w + ' min' : esc(STATUS[l?.status] || '—')}</span>` : ''}
     </div>
     ${s.note ? `<p class="note small">${esc(s.note)}</p>` : ''}
-    ${s.alert ? `<p class="small muted">🔔 Alerte si l'attente passe sous ${esc(s.alert.max)} min.</p>` : ''}
+    ${s.alert ? `<p class="small muted">🔔 Alerte si l'attente${s.alert.queue === 'SINGLE_RIDER' ? ' Single Rider' : ''} passe sous ${esc(s.alert.max)} min.</p>` : ''}
     <div class="avatars" style="margin:10px 0 14px">${who}</div>
     <div class="row">
       <button class="btn gold" data-step="${esc(s.id)}" data-status="done">Fait</button>
@@ -225,6 +225,11 @@ function renderNow() {
   } else {
     html += `<div class="card"><div class="label">Journée terminée</div><h2>Bravo, tout le programme est fait ✨</h2><p class="muted">Tu peux réinitialiser la journée depuis l'onglet Journée.</p></div>`;
   }
+  const tips = app.plan.tips || [];
+  if (tips.length) {
+    const t = tips[Math.floor(n.min / 30) % tips.length];
+    html += `<div class="card"><div class="label">Le conseil du guide</div><div class="item" style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:22px">${esc(t.icon || '💡')}</span><div><b>${esc(t.title)}</b><div class="small muted">${esc(t.text)}</div></div></div></div>`;
+  }
   if (recent.length) {
     html += `<div class="card"><div class="label">Dernières alertes envoyées</div><div class="list">${recent.map(([, a]) => `
       <div class="item"><div class="grow"><div class="name">${esc(a.title)}</div><div class="sub">${esc(a.message || '')}</div></div>
@@ -240,6 +245,15 @@ function renderNow() {
   $('#view-now').innerHTML = html;
 }
 
+function tipsCard() {
+  const t = app.plan.tips || []; const a = app.plan.avoid || [];
+  if (!t.length && !a.length) return '';
+  return `<div class="card"><div class="label">Les conseils du guide</div><div class="list">${t.map((x) => `
+    <div class="item"><span style="font-size:20px">${esc(x.icon || '💡')}</span><div class="grow"><div class="name">${esc(x.title)}</div><div class="sub">${esc(x.text)}</div></div></div>`).join('')}</div>
+    ${a.length ? `<div class="label" style="margin-top:12px;color:var(--red)">À zapper</div><div class="list">${a.map((x) => `
+    <div class="item"><span style="font-size:20px">❌</span><div class="grow"><div class="name">${esc(x.title)}</div><div class="sub">${esc(x.text)}</div></div></div>`).join('')}</div>` : ''}</div>`;
+}
+
 function renderDay() {
   const n = now(); const sch = schedule(); const ci = currentIndex(sch, n.min);
   const rows = sch.map((s, i) => {
@@ -248,7 +262,7 @@ function renderDay() {
     return `<div class="step ${s.status} ${i === ci ? 'current' : ''}">
       <div class="time">${C.fmt(s.start)}${moved ? `<s>${esc(planned.replace(':', 'h'))}</s>` : ''}</div>
       <div><div class="title name">${esc(s.title)}</div>
-        <div class="small muted">${esc(s.place?.name && C.norm(s.place.name) !== C.norm(s.title) ? s.place.name : '')}${s.fixed ? ' · heure fixe' : ''}${s.alert ? ` · 🔔 ≤ ${esc(s.alert.max)} min` : ''}</div>
+        <div class="small muted">${esc(s.place?.name && C.norm(s.place.name) !== C.norm(s.title) ? s.place.name : '')}${s.fixed ? ' · heure fixe' : ''}${s.alert ? ` · 🔔 ≤ ${esc(s.alert.max)} min${s.alert.queue === 'SINGLE_RIDER' ? ' (Single Rider)' : ''}` : ''}</div>
         <span class="tag ${esc(s.type)}">${esc(s.type || 'étape')}</span></div>
       <div class="acts">${s.status === 'todo'
         ? `<button title="Fait" data-step="${esc(s.id)}" data-status="done">✓</button><button title="Passer" data-step="${esc(s.id)}" data-status="skipped">✕</button>`
@@ -263,7 +277,8 @@ function renderDay() {
       <div class="row">${app.fam.delay ? `<span class="tag">+${app.fam.delay} min</span>` : ''}</div></div>
       <p class="small muted" style="margin:8px 0 0">Coche une étape faite ou passée : la suite se recalcule sur le téléphone de toute la famille. ↑ ↓ pour échanger deux étapes.</p></div>
     <div class="card"><div>${rows}</div></div>
-    <button class="btn ghost" id="reset-day">Réinitialiser la journée</button>`;
+    ${tipsCard()}
+    <button class="btn" id="reset-day">Réinitialiser la journée</button>`;
 }
 
 function renderWaits() {
@@ -349,7 +364,7 @@ function renderFamily() {
 const nameOf = (idOrName) => app.entities.find((e) => e.id === idOrName)?.name || idOrName;
 function ruleText(r) {
   const win = r.from || r.to ? ` entre ${r.from || 'l\'ouverture'} et ${r.to || 'la fermeture'}` : '';
-  if (r.kind === 'wait') return `Attente ≤ ${r.max} min${win}`;
+  if (r.kind === 'wait') return `Attente${r.queue === 'SINGLE_RIDER' ? ' Single Rider' : ''} ≤ ${r.max} min${win}`;
   if (r.kind === 'time') return `À ${String(r.at).replace(':', 'h')}${r.message ? ' — ' + r.message : ''}`;
   if (r.kind === 'show') return `${r.before || 20} min avant chaque représentation${win}`;
   return '';

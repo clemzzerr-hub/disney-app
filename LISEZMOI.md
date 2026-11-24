@@ -23,9 +23,10 @@ Le **code famille** (canal ntfy) n'est jamais dans ce dépôt : il est créé su
 
 Tout est dans `plan.json` :
 
-- `steps` : les étapes (`start` heure prévue, `duration` en minutes, `place` nom d'attraction/restaurant ou `entree`, `gare`, `chateau`, `disney village`, `fixed: true` pour une réservation à heure fixe, `alert: {max, from, to}` pour être prévenu quand l'attente passe sous `max`).
+- `steps` : les étapes (`start` heure prévue, `duration` en minutes, `place` nom d'attraction/restaurant ou `entree`, `gare`, `chateau`, `disney village`, `fixed: true` pour une réservation à heure fixe, `alert: {max, from, to, queue}` pour être prévenu quand l'attente passe sous `max` ; `"queue": "SINGLE_RIDER"` pour la file Single Rider).
 - `rules` : alertes libres — `{"kind": "wait", "ride": "Big Thunder Mountain", "max": 20, "from": "10:00", "to": "18:00"}`, `{"kind": "time", "at": "12:15", "title": "...", "message": "..."}`, `{"kind": "show", "show": "nom du spectacle", "before": 20}`.
 - `settings.stepReminderMin` : rappel N minutes avant chaque étape.
+- `tips` et `avoid` : les conseils du guide et ce qu'il faut zapper (affichés dans Maintenant et Journée).
 
 ## Mettre en route le veilleur (notifications téléphone en veille)
 

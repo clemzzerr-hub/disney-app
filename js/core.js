@@ -152,7 +152,7 @@ export function allRules(plan, state) {
   for (const s of plan.steps || []) {
     if (s.alert && s.place) {
       rules.push({
-        id: `step-${s.id}`, kind: 'wait', ride: s.alert.ride || s.place, max: s.alert.max,
+        id: `step-${s.id}`, kind: 'wait', ride: s.alert.ride || s.place, max: s.alert.max, queue: s.alert.queue,
         from: s.alert.from, to: s.alert.to, stepId: s.id, title: s.alert.title, message: s.alert.message,
       });
     }
@@ -167,9 +167,9 @@ export function liveIndex(live) {
   return idx;
 }
 
-export function waitOf(liveItem) {
+export function waitOf(liveItem, queue = 'STANDBY') {
   if (!liveItem || liveItem.status !== 'OPERATING') return null;
-  const w = liveItem.queue?.STANDBY?.waitTime;
+  const w = liveItem.queue?.[queue]?.waitTime;
   return typeof w === 'number' ? w : null;
 }
 
@@ -191,12 +191,13 @@ export function evaluate({ plan, state, entities, live, now }) {
     if (r.kind === 'wait') {
       if (!inWindow(r, now.min)) continue;
       const e = findEntity(entities, r.ride);
-      const w = waitOf(idx.get(e?.id));
+      const w = waitOf(idx.get(e?.id), r.queue || 'STANDBY');
       if (e && w != null && w <= Number(r.max)) {
+        const sr = r.queue === 'SINGLE_RIDER' ? ' en Single Rider' : '';
         out.push({
           key: `w|${r.id}|${now.date}`, rule: r, entity: e, wait: w, kind: 'wait',
-          title: r.title || `${e.name} : ${w} min`,
-          message: r.message || `Seulement ${w} min d'attente (ton seuil : ${r.max} min). C'est le moment d'y aller !`,
+          title: r.title ? `${r.title} (${w} min)` : `${e.name} : ${w} min${sr}`,
+          message: r.message || `Seulement ${w} min d'attente${sr} (seuil : ${r.max} min). C'est le moment d'y aller !`,
         });
       }
     } else if (r.kind === 'time') {
